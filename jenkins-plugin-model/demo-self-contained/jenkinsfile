@@ -8,18 +8,30 @@ pipeline {
             }
         }
 
-        stage('Install Docker Engine CE') {
-            steps {
-                sh '''
-                    curl -fsSL https://get.docker.com -o get-docker.sh
-                    sudo sh get-docker.sh
-                    sudo systemctl start docker
-                    sudo systemctl enable docker
-                    sudo systemctl status docker
-                    sudo docker --version
-                '''
-            }
-        }
+       stage('Install Docker Engine CE') {
+    steps {
+        sh '''
+            # Download Docker installation script
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            
+            # Install Docker
+            sudo sh get-docker.sh
+            
+            # Start Docker service
+            sudo systemctl start docker
+            
+            # Enable Docker to start on boot
+            sudo systemctl enable docker
+            
+            # Check Docker status
+            sudo systemctl status docker --no-pager
+            
+            # Verify Docker installation
+            sudo docker --version
+        '''
+    }
+}
+
 
         stage('Add Jenkins User to Docker Group') {
             steps {
